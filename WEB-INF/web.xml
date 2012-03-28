@@ -6,9 +6,17 @@
     <servlet-name>hello</servlet-name>
     <servlet-class>HelloServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>map</servlet-name>
+    <servlet-class>MapController</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>hello</servlet-name>
     <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>map</servlet-name>
+    <url-pattern>/map</url-pattern>
   </servlet-mapping>
 </web-app>
