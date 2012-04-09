@@ -14,7 +14,11 @@ public class MapController extends HttpServlet {
 	public void doPost (HttpServletRequest req, HttpServletResponse res)	throws ServletException, IOException
 	{
         PrintWriter out = res.getWriter();
-        String command = req.getParameter("com");
+        String com = req.getParameter("com");
+        if(com.equals("add") || com.equals("new"))
+        {
+        	
+        }
         out.println(req.getParameter("com"));
         out.close();
 	}
