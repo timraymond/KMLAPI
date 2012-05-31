@@ -7,6 +7,7 @@
 	<classpathentry exported="true" kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
 	<classpathentry exported="true" kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
 	<classpathentry kind="src" path="WEB-INF/src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" output="work" path="work"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAXB"/>
 	<classpathentry exported="true" kind="lib" path="C:/Program Files/Java/jre6/lib/ext/JavaAPIforKml.jar"/>
@@ -17,5 +18,6 @@
 	<classpathentry exported="true" kind="lib" path="C:/Users/sam/Downloads/jaxb-ri-20120218/lib/jsr173_1.0_api.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sam/Downloads/postgresql-9.1-901.jdbc3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sam/Downloads/postgis.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>
