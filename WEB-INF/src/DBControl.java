@@ -17,6 +17,7 @@ public class DBControl
 		 // user named root with a blank password.
 		 // This user is the default administrator
 		 // having full privileges to do anything.
+		 //con = DriverManager.getConnection(url,"postgres", "admin");
 		 con = DriverManager.getConnection(url,"postgres", "admin");
 		
 		 //Display URL and connection information
@@ -35,6 +36,7 @@ public class DBControl
 		 String z;
 		 try{
 			 stmt = con.createStatement();
+			 System.out.println(in);
 			 stmt.executeUpdate(in);
 		 }
 		 catch(Exception e){e.printStackTrace();}
@@ -46,6 +48,7 @@ public class DBControl
 		 
 		 try{
 			 stmt = con.createStatement();
+			 System.out.println(command);
 			 ResultSet rout=stmt.executeQuery(command);
 			 return rout;
 		 }
