@@ -28,14 +28,14 @@ public class MapMaker {
 		return null;
 	}
 	
-	public String lineToKML(ResultSet  r)
+	public String linesToKML(ResultSet  r)
 	{
 		try{
 			String whole_kml="";
 			while(r.next())
 			{
 				//Append all these together into one string
-				whole_kml+="\n"+makeLine(r.getString(1), r.getString(2), r.getString(3),r.getString(4), r.getString(5));
+				whole_kml+="\n"+makeLine(r.getString(1), r.getString(2), r.getString(3),r.getString(4));
 			}
 			//Turn whole_kml into valid KML
 			return whole_kml;
@@ -85,17 +85,14 @@ public class MapMaker {
 		return out_string;
 	}
 	
-	public String KMLLine(String lat1, String lon1, String lat2, String lon2, String name, String description){
-		String out_string = "<Placemark>\n        <name>"+name+"</name>\n        <visibility>1</visibility>\n        <description>"+description+"</description>\n        <LineString>\n          <coordinates>"+lat1+","+lon1+",0\n"+lat2+","+lon2+",0</coordinates>\n        </LineString>\n      </Placemark>\n";
+	public String makeLine(String name, String description, String coord, String image){
+		String img ="";
+		if(image!=null)
+			img = "\n<Style id=\"highlightPlacemark\">\n<IconStyle><Icon><href>"+image+"</href></Icon></IconStyle>\n</Style>";
+		String out_string = "<Placemark>\n\t"+img+"\n\t<name>"+name+"</name>\n        <visibility>1</visibility>\n        <description>"+description+"</description>\n"+coord+"\n      </Placemark>\n";
 		return out_string;
 	}
 	
-	public String makeLine(String one, String two, String three, String four, String five)
-	{
-		String out="";
-		
-		return out;
-	}
 	
 	public String makeShip(String name, String description, String curpos, String locations, String image)
 	{

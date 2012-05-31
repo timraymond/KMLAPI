@@ -33,7 +33,7 @@ public class MapController extends HttpServlet {
 			}
 			else if(com.equalsIgnoreCase("Ships"))
 			{
-				String[] ids = req.getParameter("shipids").split(",");
+				String[] ids = req.getParameter("ids").split(",");
 				String query="",out_string="";
 				for(int i=0;i<ids.length;i++){
 					query="SELECT name, description, ST_Askml(location), ST_Askml(history), imageurl FROM ships where id="+ids[i]+";";
@@ -43,7 +43,7 @@ public class MapController extends HttpServlet {
 			}
 			else if(com.equalsIgnoreCase("Ship"))
 			{
-		    	String query="SELECT name, description, ST_Askml(location), ST_Askml(history), imageurl FROM ships where id="+req.getParameter("shipid")+";";
+		    	String query="SELECT name, description, ST_Askml(location), ST_Askml(history), imageurl FROM ships where id="+req.getParameter("id")+";";
 		    	sendKML(mm.shipsToKML(dbc.QueryDB(query)),out);
 			}
 			else if(com.equalsIgnoreCase("allPoints"))
@@ -53,22 +53,64 @@ public class MapController extends HttpServlet {
 			}
 			else if(com.equalsIgnoreCase("Points"))
 			{
-				String[] ids = req.getParameter("pointids").split(",");
+				String[] ids = req.getParameter("ids").split(",");
 				String query="",out_string="";
 				for(int i=0;i<ids.length;i++){
 					query="SELECT name, description, ST_Askml(coord), imageurl FROM points where id="+ids[i]+";";
-					out_string+=(mm.shipsToKML(dbc.QueryDB(query)));
+					out_string+=(mm.pointsToKML(dbc.QueryDB(query)));
 				}
 		    	sendKML(out_string,out);
 			}
 			else if(com.equalsIgnoreCase("point"))
 			{
-		    	String query="SELECT name, description, ST_Askml(coord), imageurl FROM points where id="+req.getParameter("pointid")+";";
-		    	sendKML(mm.shipsToKML(dbc.QueryDB(query)),out);
+		    	String query="SELECT name, description, ST_Askml(coord), imageurl FROM points where id="+req.getParameter("id")+";";
+		    	sendKML(mm.pointsToKML(dbc.QueryDB(query)),out);
+			}
+			
+			else if(com.equalsIgnoreCase("allLines"))
+			{
+		    	String query="SELECT name, description, ST_Askml(line), imageurl FROM lines";
+		    	sendKML(mm.linesToKML(dbc.QueryDB(query)),out);
+			}
+			else if(com.equalsIgnoreCase("Lines"))
+			{
+				String[] ids = req.getParameter("ids").split(",");
+				String query="",out_string="";
+				for(int i=0;i<ids.length;i++){
+					query="SELECT name, description, ST_Askml(line), imageurl FROM lines where id="+ids[i]+";";
+					out_string+=(mm.linesToKML(dbc.QueryDB(query)));
+				}
+		    	sendKML(out_string,out);
+			}
+			else if(com.equalsIgnoreCase("line"))
+			{
+		    	String query="SELECT name, description, ST_Askml(line), imageurl FROM lines where id="+req.getParameter("id")+";";
+		    	sendKML(mm.linesToKML(dbc.QueryDB(query)),out);
+			}
+			
+			else if(com.equalsIgnoreCase("allAois"))
+			{
+		    	String query="SELECT name, description, ST_Askml(perimeter), imageurl FROM aois";
+		    	sendKML(mm.aoisToKML(dbc.QueryDB(query)),out);
+			}
+			else if(com.equalsIgnoreCase("Aois"))
+			{
+				String[] ids = req.getParameter("ids").split(",");
+				String query="",out_string="";
+				for(int i=0;i<ids.length;i++){
+					query="SELECT name, description, ST_Askml(perimeter), imageurl FROM aois where id="+ids[i]+";";
+					out_string+=mm.aoisToKML(dbc.QueryDB(query));
+				}
+		    	sendKML(out_string,out);
+			}
+			else if(com.equalsIgnoreCase("aoi"))
+			{
+		    	String query="SELECT name, description, ST_Askml(perimeter), imageurl FROM aois where id="+req.getParameter("id")+";";
+		    	sendKML(mm.aoisToKML(dbc.QueryDB(query)),out);
 			}
 			else if(com.equalsIgnoreCase("All"))
 			{
-				String points, ships, aois;
+				String points, ships, aois, lines;
 				String query="SELECT name, description, ST_Askml(coord), imageurl FROM points";
 				points=mm.pointsToKML(dbc.QueryDB(query));
 				query="SELECT name, description, ST_Askml(location), ST_Askml(history), imageurl FROM ships";
@@ -77,23 +119,31 @@ public class MapController extends HttpServlet {
 				query="SELECT name, description, ST_Askml(perimeter), imageurl FROM aois";
 				aois=mm.aoisToKML(dbc.QueryDB(query));
 				
-		    	sendKML(points+"\n"+ships+"\n"+aois,out);
+				query="SELECT name, description, ST_Askml(line), imageurl FROM lines";
+				lines=mm.linesToKML(dbc.QueryDB(query));
+				
+		    	sendKML(points+"\n"+ships+"\n"+aois+"\n"+lines,out);
 			}
 			else if(com.equalsIgnoreCase("near"))
 			{
 				String lon=req.getParameter("longitude"),
 						lat=req.getParameter("latitude"),
 						distance=req.getParameter("distance");
-				String points="",ships="";
-				String query="SELECT name, description, ST_Askml(coord), imageurl FROM points where ST_DWithIn(coord,ST_GeographyFromText('SRID=4326;POINT("+lon+" "+lat+")'), "+distance+");";
+				String points="",ships="",aois="",lines="";
 				
+				String query="SELECT name, description, ST_Askml(coord), imageurl FROM points where ST_DWithIn(coord,ST_GeographyFromText('SRID=4326;POINT("+lon+" "+lat+")'), "+distance+");";
 				points=mm.pointsToKML(dbc.QueryDB(query));
 				
 				query="SELECT name, description, ST_Askml(location), ST_Askml(history), imageurl FROM ships where ST_DWithIn(location,ST_GeographyFromText('SRID=4326;POINT("+lon+" "+lat+")'), "+distance+");";
-				
 				ships=mm.shipsToKML(dbc.QueryDB(query));
 				
-				sendKML(points+"\n"+ships,out);
+				query="SELECT name, description, ST_Askml(perimeter), imageurl FROM aois";
+				aois=mm.aoisToKML(dbc.QueryDB(query));
+				
+				query="SELECT name, description, ST_Askml(line), imageurl FROM lines";
+				lines=mm.linesToKML(dbc.QueryDB(query));
+				
+		    	sendKML(points+"\n"+ships+"\n"+aois+"\n"+lines,out);
 			}
 		}
 		else
@@ -150,6 +200,8 @@ public class MapController extends HttpServlet {
 		if(type.equals("tables")){
 			dbc.sendCommand("DROP TABLE points;");
 			dbc.sendCommand("DROP TABLE ships;");
+			dbc.sendCommand("DROP TABLE aois;");
+			dbc.sendCommand("DROP TABLE lines;");
 			System.out.println("tables dropped");
 		}
 		else{
@@ -173,8 +225,10 @@ public class MapController extends HttpServlet {
 			updateShip(req.getParameter("shipid"), req.getParameter("longitude"), req.getParameter("latitude"));
 		else if(ent.equalsIgnoreCase("tables")){
 			dbc.sendCommand("DROP TABLE IF EXISTS points;CREATE TABLE points (id serial,name varchar(50),description text,coord geography(Point,4326),imageurl text);");
+			dbc.sendCommand("DROP TABLE IF EXISTS aois;CREATE TABLE lines (id serial,name varchar(50),description text,line geography(LineString,4326),imageurl text);");
 			dbc.sendCommand("DROP TABLE IF EXISTS ships;CREATE TABLE ships (id serial,name varchar(50),description text,location geography(Point,4326),history geography(LineString,4326),imageurl text);");
 			dbc.sendCommand("DROP TABLE IF EXISTS aois;CREATE TABLE aois (id serial,name varchar(50),description text,perimeter geography(Polygon,4326),imageurl text);");
+			
 			System.out.println("tables (re)created");
 		}
 	}
@@ -208,17 +262,28 @@ public class MapController extends HttpServlet {
 	
 	private void addLine(HttpServletRequest req, HttpServletResponse res)	throws ServletException, IOException
 	{
-		String start_lat = req.getParameter("slatitude"),
-		start_lon = req.getParameter("slongitude"),
-		end_lat = req.getParameter("elatitude"),
-		end_lon = req.getParameter("elongitude"),
-		name = req.getParameter("name"),
-		desc = req.getParameter("description"),
-		map=req.getParameter("map");
-	
-	PrintWriter out = res.getWriter();
-	/*Call to add a line to the database goes here*/
-	out.println("New line added to "+map+"\n("+start_lat+","+start_lon+") to ("+end_lat+","+end_lon+")\nName: "+name+"\nDescription: "+desc);
+		ResultSet r;
+		PrintWriter out = res.getWriter();
+		String points = req.getParameter("points"),
+			name = req.getParameter("name"),
+			desc = req.getParameter("description"),
+			image=req.getParameter("imageurl");
+		
+		String out_string="";
+		
+		image=formatImageUrl(image);
+		out_string = "INSERT INTO lines (name, description, line, imageurl) values('"+name+"', '"+desc+"', ST_GeographyFromText('LINESTRING("+points+")'), "+image+") RETURNING id;";
+		
+		
+		/*Call to add a line to the database goes here*/
+		r=dbc.QueryDB(out_string);
+		
+		/* */
+		try{
+			while(r.next())
+				out.println(r.getInt(1));
+		}
+		catch(Exception e){e.printStackTrace();}
 	}
 	
 	/*
@@ -315,7 +380,7 @@ public class MapController extends HttpServlet {
 	
 	private void circlePointList(HttpServletRequest req, HttpServletResponse res)	throws ServletException, IOException
 	{
-		addAOIToDatabase(req,res,getCirclesPoints(req.getParameter("center"),req.getParameter("radius"),req.getParameter("resolution")));
+		addAOIToDatabase(req,res,getCirclesPoints(req.getParameter("center"),req.getParameter("radius"),req.getParameter("degree")));
 	}
 	
 	private String getCirclesPoints(String latlon, String radius, String resolution)
