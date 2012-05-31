@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomcatProjectProperties>
     <rootDir>/</rootDir>
-    <exportSource>false</exportSource>
+    <exportSource>true</exportSource>
     <reloadable>true</reloadable>
     <redirectLogger>false</redirectLogger>
     <updateXml>true</updateXml>
-    <warLocation></warLocation>
+    <warLocation>C:\kmlapi.war</warLocation>
     <extraInfo></extraInfo>
     <webPath>/kmlapi</webPath>
 </tomcatProjectProperties>
