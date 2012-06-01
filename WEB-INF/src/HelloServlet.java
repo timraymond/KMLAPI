@@ -4,7 +4,8 @@ import javax.servlet.http.*;
 import javax.servlet.*;
 
 public class HelloServlet extends HttpServlet {
-  public void doGet (HttpServletRequest req,
+  @Override
+public void doGet (HttpServletRequest req,
                                          HttpServletResponse res)
         throws ServletException, IOException
   {
